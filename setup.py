@@ -8,20 +8,19 @@ with open('README.md') as README_md:
 
 
 setup(
-    name='gym_super_mario_bros',
-    version='7.4.0',
-    description='Super Mario Bros. for OpenAI Gym',
+    name='mario_bros_env',
+    version='0.0.1',
+    description='Super Mario Bros. for Farama Gymnasium',
     long_description=README,
     long_description_content_type='text/markdown',
     keywords=' '.join([
         'OpenAI-Gym',
+        'Farama Gymnasium',
         'NES',
         'Super-Mario-Bros',
-        'Lost-Levels',
         'Reinforcement-Learning-Environment',
     ]),
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'License :: Free For Educational Use',
@@ -36,16 +35,15 @@ setup(
         'Topic :: Games/Entertainment :: Side-Scrolling/Arcade Games',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
-    url='https://github.com/Kautenja/gym-super-mario-bros',
+    url='https://github.com/jakobkg/mario-bros-env',
     author='Christian Kauten',
     author_email='kautencreations@gmail.com',
     license='Proprietary',
     packages=find_packages(exclude=['tests', '*.tests', '*.tests.*']),
-    package_data={ 'gym_super_mario_bros': ['_roms/*.nes'] },
     install_requires=['nes-py>=8.1.4'],
     entry_points={
         'console_scripts': [
-            'gym_super_mario_bros = gym_super_mario_bros._app.cli:main',
+            'mario_bros_env = mario_bros_env._app.cli:main',
         ],
     },
 )

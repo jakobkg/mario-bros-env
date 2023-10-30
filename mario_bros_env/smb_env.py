@@ -1,9 +1,8 @@
-"""An OpenAI Gym environment for Super Mario Bros. and Lost Levels."""
+"""A Farama Gymnasium environment for Super Mario Bros."""
 from collections import defaultdict
 from nes_py import NESEnv
 import numpy as np
 from ._roms import decode_target
-from ._roms import rom_path
 
 
 # create a dictionary mapping value of status register to string names
@@ -26,32 +25,32 @@ _STAGE_OVER_ENEMIES = np.array([0x2D, 0x31])
 
 
 class SuperMarioBrosEnv(NESEnv):
-    """An environment for playing Super Mario Bros with OpenAI Gym."""
+    """An environment for playing Super Mario Bros with Farama Gymnasium."""
+
+    metadata = {"render.modes": ["human", None], "render_modes": ["human"], "render_fps": 60}
 
     # the legal range of rewards for each step
     reward_range = (-15, 15)
 
-    def __init__(self, rom_mode='vanilla', lost_levels=False, target=None):
+    def __init__(self, rom_path='mario.nes', render_mode=None, target=None):
         """
         Initialize a new Super Mario Bros environment.
 
         Args:
-            rom_mode (str): the ROM mode to use when loading ROMs from disk
-            lost_levels (bool): whether to load the ROM with lost levels.
-                - False: load original Super Mario Bros.
-                - True: load Super Mario Bros. Lost Levels
+            rom_path (str): the path to the ROM for Super Mario Bros.
             target (tuple): a tuple of the (world, stage) to play as a level
 
         Returns:
             None
 
         """
+
         # decode the ROM path based on mode and lost levels flag
-        rom = rom_path(lost_levels, rom_mode)
+        rom = rom_path
         # initialize the super object with the ROM path
-        super(SuperMarioBrosEnv, self).__init__(rom)
+        super(SuperMarioBrosEnv, self).__init__(rom, render_mode)
         # set the target world, stage, and area variables
-        target = decode_target(target, lost_levels)
+        target = decode_target(target)
         self._target_world, self._target_stage, self._target_area = target
         # setup a variable to keep track of the last frames time
         self._time_last = 0
@@ -366,7 +365,7 @@ class SuperMarioBrosEnv(NESEnv):
         self._time_last = self._time
         self._x_position_last = self._x_position
 
-    def _did_step(self, done):
+    def _did_step(self, terminated, truncated):
         """
         Handle any RAM hacking after a step occurs.
 
@@ -378,7 +377,7 @@ class SuperMarioBrosEnv(NESEnv):
 
         """
         # if done flag is set a reset is incoming anyway, ignore any hacking
-        if done:
+        if terminated or truncated:
             return
         # if mario is dying, then cut to the chase and kill hi,
         if self._is_dying:

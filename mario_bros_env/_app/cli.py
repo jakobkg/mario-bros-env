@@ -1,7 +1,7 @@
-"""Super Mario Bros for OpenAI Gym."""
+"""Super Mario Bros for Farama Gymnasium."""
 import argparse
 import sys
-import gym
+import gymnasium as gym
 from nes_py.wrappers import JoypadSpace
 from nes_py.app.play_human import play_human
 from nes_py.app.play_random import play_random
