@@ -395,11 +395,13 @@ class SuperMarioBrosEnv(NESEnv):
         """Return the reward after a step occurs."""
         return self._x_reward + self._time_penalty + self._death_penalty
 
-    def _get_done(self):
-        """Return True if the episode is over, False otherwise."""
-        if self.is_single_stage_env:
-            return self._is_dying or self._is_dead or self._flag_get
-        return self._is_game_over
+    def _get_terminated(self):
+        """Returns True if Mario died on this step, False otherwise"""
+        return self._is_dying or self._is_dead or self._is_game_over
+
+    def _get_truncated(self):
+        """Returns True if Mario reached the flag on this step, False otherwise"""
+        return self._flag_get
 
     def _get_info(self):
         """Return the info after a step occurs"""
